@@ -2,7 +2,12 @@
 
 {% block content %}
 <div>
-    <h1>You have successfully logged in</h1>
+    {% if request.user.position == 'employee' %}
+    <h1>Welcome, {{request.user.username}}</h1>
+    <h2>Number of leaves available {{leave_records}}</h2>
     <a href="{% url 'logout' %}">Logout</a>
+    {% else %}
+    <p>came to else</p>
+    {% endif %}
 </div>
 {% endblock %}
