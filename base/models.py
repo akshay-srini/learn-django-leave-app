@@ -10,7 +10,7 @@ class CompanyUser(AbstractUser):
     position = models.CharField(max_length=100, choices=position_choices, default='employee')
 
     def __str__(self):
-        return f"{self.user.username} - {self.position}"
+        return f"{self.username} - {self.position}"
 
 class Leaves(models.Model):
     leave_type_choices = [

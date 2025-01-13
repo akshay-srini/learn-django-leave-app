@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .leave-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 16px;
+        text-align: left;
+    }
+
+    .leave-table th, .leave-table td {
+        border: 1px solid #ddd;
+        padding: 12px;
+    }
+
+    .leave-table th {
+        background-color: #f4f4f4;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .leave-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .leave-table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .action-btn {
+        padding: 8px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .accept-btn {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .accept-btn:hover {
+        background-color: #45a049;
+    }
+
+    .reject-btn {
+        background-color: #f44336;
+        color: white;
+    }
+
+    .reject-btn:hover {
+        background-color: #d32f2f;
+    }
+
+    .portal-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    .portal-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .logout {
+        display: block;
+        margin: 20px auto;
+        text-align: center;
+        color: #007BFF;
+        text-decoration: none;
+        font-size: 16px;
+    }
+
+    .logout:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="portal-container">
+    <h2>Manager Portal - Review Leave Requests</h2>
+    <table class="leave-table">
+        <thead>
+            <tr>
+                <th>Employee Name</th>
+                <th>Leave Type</th>
+                <th>No. of Days</th>
+                <th>Reason</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for leave in leave_records %}
+            <tr>
+                <td>{{ leave.employee.username }}</td>
+                <td>{{ leave.leave_type }}</td>
+                <td>{{ leave.no_of_days }}</td>
+                <td>{{ leave.reason }}</td>
+                <td>
+                    <form method="POST" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="leave_id" value="{{ leave.id }}">
+                        <button type="submit" name="action" value="accept" class="action-btn accept-btn">Accept</button>
+                    </form>
+                    <form method="POST" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="leave_id" value="{{ leave.id }}">
+                        <button type="submit" name="action" value="reject" class="action-btn reject-btn">Reject</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align: center;">No leave records available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'logout' %}" class="logout">Logout</a>
+</div>
+{% endblock %}
